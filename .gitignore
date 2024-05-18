@@ -1,3 +1,7 @@
 build/
 out/
 .vs/
+*.dll
+*.pdb
+contrib/Plugin*
+contrib/Config

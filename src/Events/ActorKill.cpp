@@ -14,6 +14,7 @@ ActorKillEventHandler::ActorKillEventHandler(ExperienceManager* manager) :
 
 	ParseDirectory("Data/SKSE/Plugins/Experience/Actors", npcs);
 	ParseDirectory("Data/SKSE/Plugins/Experience/Races", races);
+	ParseDirectory("Data/SKSE/Plugins/Experience/Keywords", keywords);
 }
 
 ActorKillEventHandler::~ActorKillEventHandler(void)
@@ -81,6 +82,7 @@ void ActorKillEventHandler::ParseDirectory(const fs::path& root, std::unordered_
 	logger::info("Directory '{}' parsed in {} ms", root.string() , ms.count());
 }
 
+
 BSEventNotifyControl ActorKillEventHandler::ProcessEvent(const ActorKill::Event* event, ActorKillEventSource*)
 {
 	if (IsValidKill(event->killer, event->victim)) {
@@ -109,9 +111,9 @@ float ActorKillEventHandler::GetLevelMult(Actor* player, Actor* victim) const
 	auto setting = Settings::GetSingleton()->GetSettingInt("iXPLevelRange");
 
 	float levelRange = std::max(setting, 1);
-	float levelDelta = player->GetLevel() - victim->GetLevel();
+	float levelDelta = victim->GetLevel();
 
-	return std::max(1.0f - (levelDelta / levelRange), 0.0f);
+	return std::max(1.0f + (levelDelta / levelRange), 0.0f);
 }
 
 float ActorKillEventHandler::GetGroupMult(PlayerCharacter* player) const
@@ -135,6 +137,15 @@ TESNPC* ActorKillEventHandler::GetTemplateBase(Actor* actor) const
 
 float ActorKillEventHandler::GetBaseReward(Actor* actor) const
 {
+
+	auto key = actor->GetActorBase()->GetKeywords();
+	for (auto keywrd : key) {
+		if (auto it = keywords.find(keywrd); it != keywords.end()) {
+			logger::info("Keyword filter works");
+			return (float)it->second;
+		}
+	}
+
 	auto base = GetTemplateBase(actor);
 	if (auto it = npcs.find(base); it != npcs.end()) {
 		return (float)it->second;

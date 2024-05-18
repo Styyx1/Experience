@@ -27,6 +27,9 @@ private:
 	void ParseDirectory(const fs::path& root, std::unordered_map<RE::TESForm*, int>& data);
 	void ParseFile(const fs::path& file, std::unordered_map<RE::TESForm*, int>& data);
 
+	std::vector<RE::BGSKeyword*>          keyword_vec;
 	std::unordered_map<RE::TESForm*, int> races;
 	std::unordered_map<RE::TESForm*, int> npcs;
+	std::unordered_map<RE::TESForm*, int> keywords;
+
 };

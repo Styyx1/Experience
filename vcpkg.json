@@ -3,6 +3,7 @@
   "version-string": "3.2.0",
   "description": "Makes the player gain levels by completing quests and exploring",
   "homepage": "https://github.com/zax-ftw/Experience",
+  "builtin-baseline": "28b1cf627c0570b3e094192df2fce31a3a2bc1d3",
   "license": "Apache-2.0",
   "dependencies": [
     "commonlibsse-ng",
