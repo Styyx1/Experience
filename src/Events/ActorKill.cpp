@@ -137,18 +137,17 @@ TESNPC* ActorKillEventHandler::GetTemplateBase(Actor* actor) const
 
 float ActorKillEventHandler::GetBaseReward(Actor* actor) const
 {
+	auto base = GetTemplateBase(actor);
+	if (auto it = npcs.find(base); it != npcs.end()) {
+		return (float)it->second;
+	}
 
 	auto key = actor->GetActorBase()->GetKeywords();
-	for (auto keywrd : key) {
+	for (auto& keywrd : key) {
 		if (auto it = keywords.find(keywrd); it != keywords.end()) {
 			logger::info("Keyword filter works");
 			return (float)it->second;
 		}
-	}
-
-	auto base = GetTemplateBase(actor);
-	if (auto it = npcs.find(base); it != npcs.end()) {
-		return (float)it->second;
 	}
 
 	auto race = base->GetRace();
